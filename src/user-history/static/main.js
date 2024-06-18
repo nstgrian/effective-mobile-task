@@ -43,7 +43,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
             },
-            { headerName: "Проблемы", field: "hasIssuesChange" }
+            { headerName: "Проблемы", field: "hasIssuesChange",
+                cellRenderer: function(params) {
+                    try {
+                        const gender = params.data.hasIssuesChange;
+                        return gender.replace(/true/g, "Да").replace(/false/g, "Нет");
+                    } catch (error) {
+                    }
+                }
+            },
         ],
     };
     const gridContainer = document.querySelector('#grid');

@@ -58,14 +58,25 @@ export class UsersService {
 
     async updateIssuesFields() {
         return this.entityManager.query(`
-                WITH updated_users AS (
-                    UPDATE "Users"
-                    SET issues = false
-                    WHERE issues <> false
-                    RETURNING *
-                )
-                SELECT COUNT(*) AS updated_issues_fields
-                FROM updated_users;
+            WITH updated_users AS (
+                UPDATE "Users"
+                SET "hasIssues" = FALSE
+                WHERE "hasIssues" <> FALSE
+                RETURNING *
+            )
+                
+            INSERT INTO "UserHistory" ("firstNameChange", "lastNameChange", "ageChange", "genderChange", "hasIssuesChange", "created")
+            SELECT "firstName", "lastName", "age", "gender", 'true -> false', false
+            FROM updated_users;
+            
+            WITH updated_users AS (
+                UPDATE "Users"
+                SET "hasIssues" = false
+                WHERE "hasIssues" <> false
+                RETURNING *
+            )
+            SELECT COUNT(*) AS updated_issues_fields
+            FROM updated_users;
             `)
     }
 }

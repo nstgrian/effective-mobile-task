@@ -47,14 +47,14 @@ export class UserHistoryService {
         delete oldUserData.id;
         for (const key in oldUserData) {
             if (KEY_DICTIONARY[key]) {
-                if (oldUserData[key] !== newUserData[key]) {
-                    differenceCounter += 1;
-                }
-                if (!newUserData.hasOwnProperty(key)) {
+                if (!newUserData.hasOwnProperty(key) || oldUserData[key] === newUserData[key]) {
                     userHistoryData[KEY_DICTIONARY[key]] = `${oldUserData[key]}`;
                     continue;
+                } else {
+                     differenceCounter += 1;
+                     userHistoryData[KEY_DICTIONARY[key]] = `${oldUserData[key]} -> ${newUserData[key]}`;
                 }
-                userHistoryData[KEY_DICTIONARY[key]] = `${oldUserData[key]} -> ${newUserData[key]}`;
+
             } else {
                 console.warn(`Key "${key}" was not found in KEY_DICTIONARY.`);
             }
